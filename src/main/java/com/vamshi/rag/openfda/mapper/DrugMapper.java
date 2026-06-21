@@ -1,6 +1,7 @@
 package com.vamshi.rag.openfda.mapper;
 
 import com.vamshi.rag.model.DrugDocument;
+import com.vamshi.rag.openfda.model.FdaDrugEventResponse;
 import com.vamshi.rag.openfda.model.FdaDrugEventResponse.FdaDrugEventRecord;
 import com.vamshi.rag.openfda.model.FdaDrugLabelResponse.FdaDrugLabelRecord;
 import com.vamshi.rag.openfda.model.FdaDrugRecord;
@@ -22,7 +23,6 @@ public class DrugMapper {
      * detail), and a pre-filtered list of Adverse Event reports relevant to this
      * drug (matched upstream, before this method is called) into a single
      * DrugDocument for vector storage.
-     *
      * ndcRecord and events may be null/empty - label data is the only required
      * source, since it's the only one with clinical content (purpose, warnings,
      * dosage). Adverse events are rolled up into one short summary string rather
@@ -131,7 +131,6 @@ public class DrugMapper {
      * Rolls up adverse event reports into one short, human-readable string instead
      * of a nested list of objects - this is the main payload-size fix versus the
      * earlier version. Caps at MAX_REACTIONS_IN_SUMMARY distinct reactions.
-     *
      * NOTE: FAERS reports establish association, not causation - this phrasing is
      * deliberately hedged and should be reflected in how the system prompt frames
      * this content to the user.
@@ -144,7 +143,7 @@ public class DrugMapper {
         List<String> reactions = events.stream()
                 .filter(e -> e.patient() != null && e.patient().reaction() != null)
                 .flatMap(e -> e.patient().reaction().stream())
-                .map(r -> r.reactionMeddraPt())
+                .map(FdaDrugEventResponse.Reaction::reactionMeddraPt)
                 .filter(Objects::nonNull)
                 .distinct()
                 .limit(MAX_REACTIONS_IN_SUMMARY)
@@ -180,6 +179,6 @@ public class DrugMapper {
     }
 
     private String firstOrNull(List<String> values) {
-        return (values == null || values.isEmpty()) ? null : values.get(0);
+        return (values == null || values.isEmpty()) ? null : values.getFirst();
     }
 }

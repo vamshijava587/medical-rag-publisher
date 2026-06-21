@@ -9,7 +9,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 @EnableConfigurationProperties(MedicalAiRagProperties.class)
 public class MedicalRagPublisherApplication {
 
-	public static void main(String[] args) {
+	static void main(String[] args) {
 		SpringApplication.run(MedicalRagPublisherApplication.class, args);
 	}
 

@@ -1,8 +1,6 @@
 package com.vamshi.rag.openfda.controller;
 
 import com.vamshi.rag.model.DrugDocument;
-import com.vamshi.rag.openfda.mapper.DrugMapper;
-import com.vamshi.rag.openfda.service.OpenFdaClient;
 import com.vamshi.rag.openfda.service.OpenFdaService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

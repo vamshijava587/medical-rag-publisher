@@ -1,6 +1,5 @@
 package com.vamshi.rag.openfda.service;
 
-import com.vamshi.rag.common.MedicalAiRagProperties;
 import com.vamshi.rag.openfda.model.FdaDrugEventResponse;
 import com.vamshi.rag.openfda.model.FdaDrugLabelResponse;
 import com.vamshi.rag.openfda.model.FdaDrugResponse;

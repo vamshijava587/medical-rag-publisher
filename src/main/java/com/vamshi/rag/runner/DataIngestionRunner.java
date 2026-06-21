@@ -1,23 +1,11 @@
 package com.vamshi.rag.runner;
 
 import com.vamshi.rag.common.MedicalAiRagProperties;
-import com.vamshi.rag.model.DrugDocument;
-import com.vamshi.rag.openfda.mapper.DrugMapper;
-import com.vamshi.rag.openfda.model.FdaDrugEventResponse;
-import com.vamshi.rag.openfda.model.FdaDrugLabelResponse;
-import com.vamshi.rag.openfda.model.FdaDrugLabelResponse.FdaDrugLabelRecord;
-import com.vamshi.rag.openfda.model.FdaDrugRecord;
-import com.vamshi.rag.openfda.service.OpenFdaClient;
 import com.vamshi.rag.openfda.service.OpenFdaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
-
-import java.util.Collections;
-import java.util.List;
 
 @Component
 public class DataIngestionRunner implements CommandLineRunner {
