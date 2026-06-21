@@ -9,5 +9,5 @@ medicalai:
       drug-ndc-path: ${FDA_API_DRUG_PATH:/drug/ndc.json}
     ingestion:
       enabled: ${FDA_INGESTION_ENABLED:true}
-      limit: ${FDA_INGESTION_LIMIT:10}
+      limit: ${FDA_INGESTION_LIMIT:1}
       skip: ${FDA_INGESTION_SKIP:0}
