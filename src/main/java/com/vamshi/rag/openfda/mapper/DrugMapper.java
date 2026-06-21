@@ -54,10 +54,10 @@ public class DrugMapper {
             manufacturer = ndcRecord.labelerName();
         }
 
-        List<String> substanceName = (openfda != null && openfda.substanceName() != null)
-                ? openfda.substanceName() : Collections.emptyList();
-        List<String> route = (openfda != null && openfda.route() != null)
-                ? openfda.route() : Collections.emptyList();
+        String substanceName = (openfda != null && openfda.substanceName() != null)
+                ? String.join(", ", openfda.substanceName())  : null;
+        String route = (openfda != null && openfda.route() != null)
+                ? String.join(", ", openfda.route())  : null;
         String productType = firstOrNull(openfda != null ? openfda.productType() : null);
 
         String dosageForm = (ndcRecord != null) ? ndcRecord.dosageForm() : null;
@@ -92,7 +92,6 @@ public class DrugMapper {
                 warnings,
                 keepOutOfReachOfChildren,
                 otherSafetyInformation,
-                null, // inactiveIngredient - reserved for v2 allergy-checking feature
                 adverseEventSummary
         );
     }

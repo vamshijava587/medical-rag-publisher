@@ -8,9 +8,9 @@ public record DrugDocument(
         String productNdc,
         String brandName,
         String genericName,
-        List<String> substanceName,
+        String substanceName,
         String manufacturer,
-        List<String> route,
+        String route,
         String productType,
         String dosageForm,
         String activeIngredientsWithStrength,
@@ -20,6 +20,5 @@ public record DrugDocument(
         String warnings,
         String keepOutOfReachOfChildren,
         String otherSafetyInformation,
-        String inactiveIngredient,        // reserved for v2, null for now
-        String adverseEventSummary       // single rolled-up string, not a list of objects
+        String adverseEventSummary
 ) {}

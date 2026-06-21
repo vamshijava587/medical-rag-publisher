@@ -2,6 +2,19 @@ spring:
   application:
     name: medical-rag-publisher
 
+  ai:
+    ollama:
+      base-url: http://localhost:11434
+      embedding:
+        model: mxbai-embed-large
+    vectorstore:
+      qdrant:
+        host: fba1bda0-b83d-4360-9856-fc31986894fe.eu-central-1-0.aws.cloud.qdrant.io
+        port: 6334
+        collection-name: medical-agent-rag
+        use-tls: true
+        api-key: ${QDRANT_API_KEY}
+
 medicalai:
   openfda:
     api:
