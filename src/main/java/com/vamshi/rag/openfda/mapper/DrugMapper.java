@@ -73,11 +73,6 @@ public class DrugMapper {
 
         String adverseEventSummary = buildAdverseEventSummary(events);
 
-        String embeddingText = buildEmbeddingText(
-                purpose, indicationsAndUsage, dosageAndAdministration,
-                warnings, keepOutOfReachOfChildren, otherSafetyInformation,
-                adverseEventSummary
-        );
 
         return new DrugDocument(
                 label.id(),
@@ -98,8 +93,7 @@ public class DrugMapper {
                 keepOutOfReachOfChildren,
                 otherSafetyInformation,
                 null, // inactiveIngredient - reserved for v2 allergy-checking feature
-                adverseEventSummary,
-                embeddingText
+                adverseEventSummary
         );
     }
 
@@ -157,26 +151,6 @@ public class DrugMapper {
                 + String.join(", ", reactions) + ".";
     }
 
-    private String buildEmbeddingText(String purpose, String indicationsAndUsage,
-                                      String dosageAndAdministration, String warnings,
-                                      String keepOutOfReachOfChildren, String otherSafetyInformation,
-                                      String adverseEventSummary) {
-        StringBuilder sb = new StringBuilder();
-        appendIfPresent(sb, "Purpose", purpose);
-        appendIfPresent(sb, "Indications and Usage", indicationsAndUsage);
-        appendIfPresent(sb, "Dosage and Administration", dosageAndAdministration);
-        appendIfPresent(sb, "Warnings", warnings);
-        appendIfPresent(sb, "Keep Out of Reach of Children", keepOutOfReachOfChildren);
-        appendIfPresent(sb, "Other Safety Information", otherSafetyInformation);
-        appendIfPresent(sb, "Adverse Event Reports", adverseEventSummary);
-        return sb.toString().trim();
-    }
-
-    private void appendIfPresent(StringBuilder sb, String label, String value) {
-        if (value != null && !value.isBlank()) {
-            sb.append(label).append(": ").append(value).append(". ");
-        }
-    }
 
     private String firstOrNull(List<String> values) {
         return (values == null || values.isEmpty()) ? null : values.getFirst();

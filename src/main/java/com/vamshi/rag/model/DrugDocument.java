@@ -21,6 +21,5 @@ public record DrugDocument(
         String keepOutOfReachOfChildren,
         String otherSafetyInformation,
         String inactiveIngredient,        // reserved for v2, null for now
-        String adverseEventSummary,       // single rolled-up string, not a list of objects
-        String embeddingText
+        String adverseEventSummary       // single rolled-up string, not a list of objects
 ) {}
