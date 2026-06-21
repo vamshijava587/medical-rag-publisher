@@ -3,6 +3,7 @@ package com.vamshi.rag.openfda.controller;
 import com.vamshi.rag.model.DrugDocument;
 import com.vamshi.rag.openfda.mapper.DrugMapper;
 import com.vamshi.rag.openfda.service.OpenFdaClient;
+import com.vamshi.rag.openfda.service.OpenFdaService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,12 +16,10 @@ import java.util.List;
 @RequestMapping("/api/v1/drugs")
 public class DrugController {
 
-    private final OpenFdaClient openFdaClient;
-    private final DrugMapper drugMapper;
+    private final OpenFdaService openFdaService;
 
-    public DrugController(OpenFdaClient openFdaClient, DrugMapper drugMapper) {
-        this.openFdaClient = openFdaClient;
-        this.drugMapper = drugMapper;
+    public DrugController(OpenFdaService openFdaService) {
+        this.openFdaService = openFdaService;
     }
 
     @GetMapping
@@ -28,9 +27,6 @@ public class DrugController {
             @RequestParam(defaultValue = "10") int limit,
             @RequestParam(defaultValue = "0") int skip) {
         
-        return openFdaClient.fetchDrugs(limit, skip)
-                .map(response -> response.results().stream()
-                        .map(drugMapper::toDrugDocument)
-                        .toList());
+        return openFdaService.getDrugs(limit, skip);
     }
 }
