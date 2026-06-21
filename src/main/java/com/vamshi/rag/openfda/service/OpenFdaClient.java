@@ -12,10 +12,8 @@ import reactor.core.publisher.Mono;
 public class OpenFdaClient {
 
     private final WebClient webClient;
-    private final MedicalAiRagProperties properties;
 
-    public OpenFdaClient(WebClient webClient, MedicalAiRagProperties properties) {
-        this.properties = properties;
+    public OpenFdaClient(WebClient webClient) {
         this.webClient = webClient;
     }
 
@@ -24,7 +22,7 @@ public class OpenFdaClient {
                 .get()
                 .uri(uriBuilder ->
                         uriBuilder
-                                .path(properties.openFda().api().drugNdcPath())
+                                .path("/drug/ndc.json")
                                 .queryParam("limit", limit)
                                 .queryParam("skip", skip)
                                 .build())
