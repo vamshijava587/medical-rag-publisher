@@ -12,7 +12,8 @@ spring:
         host: ${QDRANT_URL:localhost}
         port: 6334
         collection-name: medical-agent-rag
-#        api-key: ${QDRANT_API_KEY}
+        use-tls: true
+        api-key: ${QDRANT_API_KEY}
 
 medicalai:
   openfda:
