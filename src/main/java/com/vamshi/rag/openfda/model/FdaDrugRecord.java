@@ -11,7 +11,7 @@ public record FdaDrugRecord(
     @JsonProperty("labeler_name") String labelerName,
     @JsonProperty("brand_name") String brandName,
     @JsonProperty("active_ingredients") List<ActiveIngredient> activeIngredients,
-    boolean finished,
+    Boolean finished,
     List<Packaging> packaging,
     @JsonProperty("listing_expiration_date") String listingExpirationDate,
     OpenFdaData openfda,
@@ -37,7 +37,7 @@ public record FdaDrugRecord(
         @JsonProperty("package_ndc") String packageNdc,
         String description,
         @JsonProperty("marketing_start_date") String marketingStartDate,
-        boolean sample
+        Boolean sample
     ) {}
 
     @JsonIgnoreProperties(ignoreUnknown = true)

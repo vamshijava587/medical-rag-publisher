@@ -10,7 +10,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class WebClientConfig {
 
     @Bean
-    public WebClient webClientBuilder(MedicalAiRagProperties properties) {
+    public WebClient openFdaWebClient(MedicalAiRagProperties properties) {
         final int size = 16 * 1024 * 1024; // 16 MB
         final ExchangeStrategies strategies = ExchangeStrategies.builder()
                 .codecs(codecs -> codecs.defaultCodecs().maxInMemorySize(size))

@@ -3,6 +3,7 @@ package com.vamshi.rag.openfda.service;
 import com.vamshi.rag.openfda.model.FdaDrugEventResponse;
 import com.vamshi.rag.openfda.model.FdaDrugLabelResponse;
 import com.vamshi.rag.openfda.model.FdaDrugResponse;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -12,7 +13,7 @@ public class OpenFdaClient {
 
     private final WebClient webClient;
 
-    public OpenFdaClient(WebClient webClient) {
+    public OpenFdaClient(@Qualifier("openFdaWebClient") WebClient webClient) {
         this.webClient = webClient;
     }
 

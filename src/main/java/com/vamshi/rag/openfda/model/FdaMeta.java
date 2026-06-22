@@ -12,5 +12,5 @@ public record FdaMeta(
     Results results
 ) {
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public record Results(int skip, int limit, int total) {}
+    public record Results(Integer skip, Integer limit, Integer total) {}
 }

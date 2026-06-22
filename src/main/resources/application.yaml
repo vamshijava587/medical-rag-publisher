@@ -9,17 +9,18 @@ spring:
         model: mxbai-embed-large
     vectorstore:
       qdrant:
-        host: fba1bda0-b83d-4360-9856-fc31986894fe.eu-central-1-0.aws.cloud.qdrant.io
+        host: ${QDRANT_URL:localhost}
         port: 6334
         collection-name: medical-agent-rag
-        use-tls: true
-        api-key: ${QDRANT_API_KEY}
+#        api-key: ${QDRANT_API_KEY}
 
 medicalai:
   openfda:
     api:
       base-url: ${FDA_API_BASE_URL:https://api.fda.gov}
     ingestion:
-      enabled: ${FDA_INGESTION_ENABLED:true}
+      enabled: ${FDA_INGESTION_ENABLED:false}
       limit: ${FDA_INGESTION_LIMIT:1}
       skip: ${FDA_INGESTION_SKIP:0}
+  vector:
+    publish: true
