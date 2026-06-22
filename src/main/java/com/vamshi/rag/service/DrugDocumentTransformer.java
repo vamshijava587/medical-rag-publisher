@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 @Service
 public class DrugDocumentTransformer {
@@ -17,26 +16,47 @@ public class DrugDocumentTransformer {
         return new Document(drugDocument.id(), content, metadata);
     }
 
+    /**
+     * Builds the text actually sent to the embedding model. Capped per-field
+     * (not one global truncation) to stay under mxbai-embed-large's token limit
+     * while keeping the most safety-critical content - warnings first - as
+     * intact as possible. All text here is verbatim FDA wording, truncated by
+     * character count only, never rewritten or paraphrased: an LLM rephrase
+     * could silently drop or alter a clinical qualifier (a dose limit, an
+     * exception clause) with no way to detect it happened across a batch.
+     * The full untruncated text is preserved separately in metadata (see
+     * buildMetadata below) for display/retrieval after a document is found.
+     */
     private String buildContentForEmbedding(DrugDocument drugDocument) {
-        return String.join(" ",
-                Objects.toString(drugDocument.id(), ""),
-                Objects.toString(drugDocument.brandName(), ""),
-                Objects.toString(drugDocument.productNdc(), ""),
-                Objects.toString(drugDocument.genericName(), ""),
-                Objects.toString(drugDocument.substanceName(), ""),
-                Objects.toString(drugDocument.manufacturer(), ""),
-                Objects.toString(drugDocument.route(), ""),
-                Objects.toString(drugDocument.productType(), ""),
-                Objects.toString(drugDocument.dosageForm(), ""),
-                Objects.toString(drugDocument.activeIngredientsWithStrength(), ""),
-                Objects.toString(drugDocument.purpose(), ""),
-                Objects.toString(drugDocument.indicationsAndUsage(), ""),
-                Objects.toString(drugDocument.dosageAndAdministration(), ""),
-                Objects.toString(drugDocument.warnings(), ""),
-                Objects.toString(drugDocument.keepOutOfReachOfChildren(), ""),
-                Objects.toString(drugDocument.otherSafetyInformation(), ""),
-                Objects.toString(drugDocument.adverseEventSummary(), "")
-        ).trim();
+        StringBuilder sb = new StringBuilder();
+
+        appendCapped(sb, drugDocument.warnings(), 600);
+        appendCapped(sb, drugDocument.dosageAndAdministration(), 400);
+        appendCapped(sb, drugDocument.indicationsAndUsage(), 300);
+        appendCapped(sb, drugDocument.keepOutOfReachOfChildren(), 150);
+        appendCapped(sb, drugDocument.otherSafetyInformation(), 150);
+        appendCapped(sb, drugDocument.adverseEventSummary(), 200);
+        appendCapped(sb, drugDocument.purpose(), 100);
+        appendCapped(sb, drugDocument.activeIngredientsWithStrength(), 100);
+
+        appendIfPresent(sb, drugDocument.brandName());
+        appendIfPresent(sb, drugDocument.genericName());
+
+        return sb.toString().trim();
+    }
+
+    private void appendCapped(StringBuilder sb, String value, int maxChars) {
+        if (value == null || value.isBlank()) {
+            return;
+        }
+        String text = value.length() > maxChars ? value.substring(0, maxChars) : value;
+        sb.append(" ").append(text);
+    }
+
+    private void appendIfPresent(StringBuilder sb, String value) {
+        if (value != null && !value.isBlank()) {
+            sb.append(" ").append(value);
+        }
     }
 
     /**
@@ -45,6 +65,9 @@ public class DrugDocumentTransformer {
      * like otherSafetyInformation or adverseEventSummary are often absent for a
      * given drug - so null entries are filtered out here rather than coerced to
      * empty strings, which would misleadingly suggest the field exists but is blank.
+     * Stores the FULL untruncated text for every field, regardless of what was
+     * capped in buildContentForEmbedding above - this is the source of truth
+     * shown to the user/LLM after retrieval, not what was searched on.
      */
     private Map<String, Object> buildMetadata(DrugDocument drugDocument) {
         Map<String, Object> metadata = new HashMap<>();
